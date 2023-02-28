@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="formula1.mapper.FormulaMapper">
+	
+	<!-- 그랑프리 리스트 -->
+	<select id="grandprixList" resultType="formula1.dto.GrandprixDto">
+	select circuit_idx, grandprix_idx, grandprix_date, grandprix_weather
+	from grandprix
+	</select>
+	
+	<!-- 써킷 리스트 -->
+	<select id="circuitList" resultType="formula1.dto.CircuitDto">
+	select circuit_idx, circuit_nation, circuit_image
+	from circuit
+	</select>
+	
+	<!-- 팀 리스트 -->
+	<select id="teamList" resultType="formula1.dto.TeamDto">
+	select team_idx, team_name, team_driver1, team_driver2,
+		   team_car_image, team_nation, team_chief, team_wincount, team_point
+	from team
+	</select>
+	
+	<!-- 드라이버 리스트 -->
+	<select id="driverList" resultType="formula1.dto.DriverDto">
+	select team_idx, driver_idx, driver_number, driver_name, driver_image,
+	       driver_nation, driver_wincount, driver_point1, driver_point2
+	from driver
+	</select>
+	
+	<!-- 소식 리스트 -->
+	<select id="newsList" resultType="formula1.dto.NewsDto">
+	select user_id, news_idx, news_title, news_contents, news_writer,
+	       news_created_dt
+	from news
+	</select>
+	
+	<!-- 게시판 글 작성 -->
+	<insert id="insertBoard" parameterType="formula1.dto.BoardDto">
+	insert into board (user_id, board_writer, board_title, board_contents, board_created_dt)
+	values (#{userId}, #{boardWriter}, #{boardTitle}, #{boardContents}, now())
+	</insert>
+	
+	<!-- 게시판 리스트 -->
+	<select id="boardList" resultType="formula1.dto.BoardDto">
+	select user_id, board_idx, board_title, board_contents, board_writer,  
+		   date_format(board_created_dt, '%Y-%m-%d %H:%i:%s') as board_created_dt		   
+	from board
+	</select>
+	
+	<!-- 게시판 상세 -->
+	<select id="boardDetail" parameterType="int" resultType="formula1.dto.BoardDto">
+	select user_id, board_idx, board_title, board_contents, board_writer,  
+		   date_format(board_created_dt, '%Y-%m-%d %H:%i:%s') as board_created_dt		   
+	from board
+	where board_idx = #{boardIdx}		
+	</select>
+	
+	<!-- 드라이버 상세 -->
+	<select id="driverDetail" parameterType="String" resultType="formula1.dto.driverDto">
+	select team_idx, driver_idx, driver_number, driver_name, driver_image,
+		   driver_nation, driver_nation, driver_wincount, driver_point1, driver_point2
+	from driver
+	where driver_name = #{driverName}
+	</select>
+	
+	<!-- 관리자용 드라이버(정보) 작성
+	<insert id="insertDriverInfo" parameterType="formula1.dto.driverDto">
+	insert into driver (team_idx, driver_idx, driver_number, driver_name, driver_image,
+				driver_nation, driver_wincount, driver_point1, driver_point2)
+	values (#{teamIdx}, #{driverIdx}, #{driverNumber}, #{driverName}, #{driverImage},
+				#{drieverNation}, #{driverWincount}, #{driverPoint1}, #{driverPoint2})
+	</insert>
+	-->
+	
+	
+	
+</mapper>
